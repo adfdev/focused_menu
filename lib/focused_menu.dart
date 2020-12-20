@@ -20,28 +20,30 @@ class FocusedMenuHolder extends StatefulWidget {
   final Color blurBackgroundColor;
   final double bottomOffsetHeight;
   final double menuOffset;
+  final BuildContext customContext;
 
   /// Open with tap insted of long press.
   final bool openWithTap;
 
-  const FocusedMenuHolder(
-      {Key key,
-      @required this.child,
-      this.onPressed,
-      this.onLongPress,
-      this.onCloseMenu,
-      @required this.menuItems,
-      this.duration,
-      this.menuBoxDecoration,
-      this.menuItemExtent,
-      this.animateMenuItems,
-      this.blurSize,
-      this.blurBackgroundColor,
-      this.menuWidth,
-      this.bottomOffsetHeight,
-      this.menuOffset,
-      this.openWithTap = false})
-      : super(key: key);
+  const FocusedMenuHolder({
+    Key key,
+    @required this.child,
+    this.onPressed,
+    this.onLongPress,
+    this.onCloseMenu,
+    @required this.menuItems,
+    this.duration,
+    this.menuBoxDecoration,
+    this.menuItemExtent,
+    this.animateMenuItems,
+    this.blurSize,
+    this.blurBackgroundColor,
+    this.menuWidth,
+    this.bottomOffsetHeight,
+    this.menuOffset,
+    this.openWithTap = false,
+    this.customContext,
+  }) : super(key: key);
 
   @override
   _FocusedMenuHolderState createState() => _FocusedMenuHolderState();
@@ -64,6 +66,7 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.customContext != null) context = widget.customContext;
     return GestureDetector(
         key: containerKey,
         onTap: () async {
