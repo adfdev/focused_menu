@@ -21,6 +21,7 @@ class FocusedMenuHolder extends StatefulWidget {
   final double bottomOffsetHeight;
   final double menuOffset;
   final BuildContext customContext;
+  final ScrollPhysics menuScrollPhysics;
 
   /// Open with tap insted of long press.
   final bool openWithTap;
@@ -43,6 +44,7 @@ class FocusedMenuHolder extends StatefulWidget {
     this.menuOffset,
     this.openWithTap = false,
     this.customContext,
+    this.menuScrollPhysics = const BouncingScrollPhysics(),
   }) : super(key: key);
 
   @override
@@ -95,6 +97,7 @@ class _FocusedMenuHolderState extends State<FocusedMenuHolder> {
           return FadeTransition(
               opacity: animation,
               child: FocusedMenuDetails(
+                menuScrollPhysics: widget.menuScrollPhysics,
                 itemExtent: widget.menuItemExtent,
                 menuBoxDecoration: widget.menuBoxDecoration,
                 child: widget.child,
@@ -131,22 +134,24 @@ class FocusedMenuDetails extends StatelessWidget {
   final Color blurBackgroundColor;
   final double bottomOffsetHeight;
   final double menuOffset;
+  final ScrollPhysics menuScrollPhysics;
 
-  const FocusedMenuDetails(
-      {Key key,
-      @required this.menuItems,
-      @required this.child,
-      @required this.childOffset,
-      @required this.childSize,
-      @required this.menuBoxDecoration,
-      @required this.itemExtent,
-      @required this.animateMenu,
-      @required this.blurSize,
-      @required this.blurBackgroundColor,
-      @required this.menuWidth,
-      this.bottomOffsetHeight,
-      this.menuOffset})
-      : super(key: key);
+  const FocusedMenuDetails({
+    Key key,
+    @required this.menuItems,
+    @required this.child,
+    @required this.childOffset,
+    @required this.childSize,
+    @required this.menuBoxDecoration,
+    @required this.itemExtent,
+    @required this.animateMenu,
+    @required this.blurSize,
+    @required this.blurBackgroundColor,
+    @required this.menuWidth,
+    this.bottomOffsetHeight,
+    this.menuOffset,
+    @required this.menuScrollPhysics,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +210,7 @@ class FocusedMenuDetails extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: menuItems.length,
                       padding: EdgeInsets.zero,
-                      physics: BouncingScrollPhysics(),
+                      physics: menuScrollPhysics,
                       itemBuilder: (context, index) {
                         FocusedMenuItem item = menuItems[index];
                         Widget listItem = GestureDetector(
